@@ -33,7 +33,7 @@ Distinguishing between FYI and MYI is vital due to their differing roles in ocea
 
 While previous studies have successfully applied GMM to detect sea ice and leads (e.g., [Huang et al., 2024](https://www.researchgate.net/publication/380542977)), few have addressed the more subtle spectral and geometric differences between FYI and MYI using an unsupervised approach.
 
-This project builds on prior applications of unsupervised clustering to sea ice (e.g., [Bishop, 2006](https://www.springer.com/gp/book/9780387310732); [Chellappa et al., 2020](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2020GL091285)), and applies these models to a multi-sensor dataset collected over the **Beaufort Sea (72.48°N, -127.35°W)** on **1 May 2024**, a time and location likely to contain both FYI and MYI.
+This project builds on prior applications of unsupervised clustering to sea ice (e.g., [Bishop, 2006](https://www.springer.com/gp/book/9780387310732); [Chellappa et al., 2020](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2020GL091285)), and applies these models to a multi-sensor dataset collected over the **Beaufort Sea (72.48°N, -127.35°W)** on **1 May 2024**.
 
 ## 3. The SENTINEL-2 and SENTINEL-3 Satellites
 
@@ -163,7 +163,7 @@ The environmental cost of this project is minimal by design. The use of shared i
 ---
 ## 6. Getting Started
 
-This project was created and executed using **Google Colab**, a cloud-based environment for running Python code, especially well-suited for working with Jupyter notebooks and geospatial data.
+This project was created and executed using **Google Colab**, a cloud-based environment for running Python code.
 
 To replicate or adapt this project, follow these steps:
 
@@ -235,7 +235,7 @@ This project was developed as part of the AI4EO module (GEOL0069) at University 
 
 Special thanks to:
 
-- (lecturer/supervisor name), for guidance on Earth Observation machine learning
+- Dr Michel Tsamados, Weibin Chen and Connor Nelson for guidance on Earth Observation machine learning
 - The Copernicus Programme and European Space Agency (ESA), for making satellite data openly accessible
 - Colab and scikit-learn teams, for enabling fast prototyping of clustering models
 
