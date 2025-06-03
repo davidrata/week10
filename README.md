@@ -18,11 +18,13 @@ While supervised learning approaches require labelled datasets — often scarce 
 ---
 
 ## 2. Background
-
 Arctic sea ice exists in two main forms:
 
-- **First-Year Ice (FYI)**: Newly formed, smoother, snow-covered, and highly reflective
-- **Multi-Year Ice (MYI)**: Older, thicker, rougher, with lower albedo due to melt ponds or surface scattering
+- **First-Year Ice (FYI)**: Newly formed, smoother, and often covered with fresh snow, leading to higher surface reflectance. FYI typically has a more uniform albedo due to limited melt pond development and relatively flat surface morphology ([Polashenski et al., 2012](https://doi.org/10.1029/2011JC007231)).
+
+- **Multi-Year Ice (MYI)**: Older, thicker, and more structurally deformed due to repeated freeze–thaw cycles. MYI generally exhibits lower albedo, appearing darker in optical imagery due to deeper melt ponds and increased surface roughness ([Landy et al., 2023](https://tc.copernicus.org/preprints/tc-2023-75/)).
+
+These differences are detectable in satellite data and form the basis for remote sensing-based classification approaches.
 
 Distinguishing between FYI and MYI is vital due to their differing roles in ocean-atmosphere feedback, melt dynamics, and long-term climate stability. Remote sensing offers a non-invasive means to monitor these forms, particularly through:
 
@@ -83,9 +85,30 @@ This project implements two unsupervised clustering algorithms:
 - More flexible for real-world remote sensing data where FYI and MYI may not be clearly separable.
 
 #### Workflow Summary:
-1. **Sentinel-2 Band 4 reflectance** is flattened and downsampled.
-2. A **GMM with 2 components** is fitted to the valid reflectance values.
-3. The resulting clusters are reshaped back into a 2D image and interpreted as FYI vs MYI based on spatial structure and brightness.
+
+1. **Sentinel-2 Band 4 reflectance data** is loaded and preprocessed. Non-zero valid pixels are selected and optionally downsampled to manage memory usage.
+
+2. The cleaned 1D reflectance array is used to fit a **Gaussian Mixture Model (GMM)** with 2 components, representing a hypothesis of FYI vs MYI based on surface brightness differences.
+
+3. The GMM cluster labels are projected back into 2D to generate a classified image. Visual interpretation of spatial patterns (e.g., textured vs. smoother areas) helps link the clusters to sea ice types.
+
+4. Separately, **Sentinel-3 SRAL altimetry data** is read and processed to extract waveform-based features:
+   - **Peakiness** (sharpness of waveform return)
+   - **Stack Standard Deviation (SSD)** (spread of returned power)
+   - **Backscatter coefficient (σ₀)**
+
+5. These features are combined and standardized to form a clustering input matrix. A GMM with 2 components is applied to classify radar waveforms, under the FYI vs MYI hypothesis.
+
+6. The resulting clusters are visualized in multiple ways:
+   - Feature scatter plots (e.g., σ₀ vs peakiness)
+   - Average waveform plots with standard deviation shading
+   - Full waveform traces for each cluster to assess consistency and distinctiveness
+
+7. **Waveform alignment** is performed for each cluster (using cross-correlation) to reduce noise and highlight structural waveform differences between the ice types.
+
+8. Observations across both sensors are qualitatively compared to support the interpretation of FYI vs MYI classification.
+
+
 
 
 
@@ -144,7 +167,7 @@ This project was created and executed using **Google Colab**, a cloud-based envi
 
 To replicate or adapt this project, follow these steps:
 
-1. Download the notebook file from this repository (`Unsupervised_Sea_Ice_Classification.ipynb`) or open it directly in Google Colab.
+1. Download the notebook file from this repository (`Unsupervised_Classification_of_First_Year_and_Multi_Year_Sea_Ice.ipynb`) or open it directly in Google Colab.
 2. Download the required satellite datasets. See the section below for download instructions.
 3. Upload the datasets to your Google Drive, or place them in your local filesystem if working offline.
 4. Modify the file paths in the notebook (`band_path`, `waveform_file`, etc.) to point to the location of the data you downloaded.
@@ -159,7 +182,7 @@ The datasets used for this project are Level-1C Sentinel-2 MSI optical imagery a
 
 <img width="658" alt="1" src="https://github.com/user-attachments/assets/d8fd78fa-553e-46e8-b84a-bca5bfdc5f67" />
 
-This map shows the area where the data was taken by Sentinel 2 And 3
+This map shows the area where the data was taken by Sentinel 2 And 3 Satellites
 
 The specific datasets used are:
 
@@ -231,6 +254,9 @@ Special thanks to:
 - Huang, X., et al. (2024). Enhanced sea ice classification using GMM. *Remote Sensing Letters*. [DOI or link] (replace with correct one if known)
 
 - Bishop, C. (2006). *Pattern Recognition and Machine Learning*. Springer.
+- Polashenski, C., Perovich, D., & Courville, Z. (2012). Melt pond formation on Arctic sea ice: Dynamics and seasonal evolution. *Journal of Geophysical Research: Oceans*, 117(C1). [https://doi.org/10.1029/2011JC007231](https://doi.org/10.1029/2011JC007231)
+
+- Landy, J. C., et al. (2023). Melt pond evolution and its impact on Arctic ice–albedo feedback. *The Cryosphere Discussions*. [https://tc.copernicus.org/preprints/tc-2023-75/](https://tc.copernicus.org/preprints/tc-2023-75/)
 
 
 
